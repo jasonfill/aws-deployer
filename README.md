@@ -1,6 +1,10 @@
 # AWS Deployer
 
+> **Should be considered very beta at the moment.**
+
 Provides a method to easily deploy/update code from a git repo to all servers within an AWS Autoscaling group.  Similar to how AWS CodeDeploy works without the requirement of the CodeDeploy agent on the actual server.  
+
+
 
 ## Sample Usage
 
