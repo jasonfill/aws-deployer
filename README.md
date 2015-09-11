@@ -5,6 +5,20 @@
 Provides a method to easily deploy/update code from a git repo to all servers within an AWS Autoscaling group.  Similar to how AWS CodeDeploy works without the requirement of the CodeDeploy agent on the actual server.  
 
 
+## Setup
+In order to have things working properly a few different setup items need to be handled.  The primary reason for this is to ensure the AWS resources are properly setup for [secure access](http://blogs.aws.amazon.com/security/post/Tx3D6U6WSFGOK2H/A-New-and-Standardized-Way-to-Manage-Credentials-in-the-AWS-SDKs).
+
+* A directory at ~/.aws.  If you have the aws-cli tools installed this directory should already be created.
+* In the ~/.aws directory, a profile file called "credentials" should be created.
+* Add a new profile item with your access information.
+
+```
+[my-profile]
+aws_access_key_id = key
+aws_secret_access_key = secret
+```
+
+*  Using the profile name from the credentials file, copy the pem to a file in the directory called my-profile.pem.  
 
 ## Sample Usage
 
@@ -26,11 +40,13 @@ Deploy.run(opts, function (err, groups) {
 
 ```
 {
-	aws : 'The sandard configuration options for the aws-sdk',
-	pem : 'String value of the AWS pem that is required to connect to the servers.'
+	aws : 'The standard configuration options for the aws-sdk.  This is not required',
+	pem : 'String value of the AWS pem that is required to connect to the servers. This is not required',
+	aws_profile : 'name of the profile to use.'
 }
 ```
 
+> NOTE: The AWS IAM User will need to have EC2ReadOnly access.
 
 ##Public Functions
 
@@ -123,23 +139,14 @@ Deploy.on("error", function(error){ });
 
 ```
 var config = {
-    aws : {
-        accessKeyId: process.env.AWS_KEY ,
-        secretAccessKey: process.env.AWS_SECRET,
-        region: "us-east-1",
-        maxRetries: 2,
-        sslEnabled: true,
-        convertResponseTypes: true,
-        apiVersion: "2014-11-11"
-    },
-    pem : process.env.AWS_PEM
-};
+    aws_profile : 'my-profile'
+    };
 
 var Deploy = require('aws-deployer')(config);
 
 var opts = {
     "parallel_groups": "availability_zone",
-    "auto_scaling_groups": "SQL-Proxy-ASG",
+    "auto_scaling_groups": "My-AutoScaling-Group-Name",
     "command" : "sudo su;cd /data/application;git reset --hard;git pull;npm install;pm2 reload all;pm2 jlist;"
 };
 

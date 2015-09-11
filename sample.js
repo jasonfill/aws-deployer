@@ -1,15 +1,6 @@
 
 var config = {
-    aws : {
-        accessKeyId: process.env.AWS_KEY ,
-        secretAccessKey: process.env.AWS_SECRET,
-        region: "us-east-1",
-        maxRetries: 2,
-        sslEnabled: true,
-        convertResponseTypes: true,
-        apiVersion: "2014-11-11"
-    },
-    pem : process.env.AWS_PEM
+    aws_profile: 'smarterservices-deployment'
 };
 
 var Deploy = require('./index.js')(config);
