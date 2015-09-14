@@ -76,45 +76,75 @@ Deploy.on("ready", function(config){ });
 
 When the instance has been fully setup and ready for use.
 
+##### data
+* deployment_id (string): A uuid value that is assigned to this deployment.
+* params (object): The parameters that were passed into run().
+* groups (array): The actual groups that will be processed in parallel.
+* grouping (string): How the groups were segmented.  This is reflected based on what is passed into run().
+
+
 ```
-Deploy.on("start-deploy", function(config){ });
+Deploy.on("start-deploy", function(data){ });
 ```
 
 #### start-deploy-to-group
 
 When the deployment has been started for a specific group.
 
+##### data
+* deployment_id (string): A uuid value that is assigned to this deployment.
+* group_key (string): The key of the group that is being started.
+
 ```
-Deploy.on("start-deploy-to-group", function(key){ });
+Deploy.on("start-deploy-to-group", function(data){ });
 ```
 
 #### complete-deploy-to-group
 
 When the deployment has been completed for a specific group.
 
+##### data
+* deployment_id (string): A uuid value that was assigned to this deployment.
+* group_key (string): The key of the group that completed..
+
+
 ```
-Deploy.on("complete-deploy-to-group", function(key){ });
+Deploy.on("complete-deploy-to-group", function(data){ });
 ```
 
 #### end-deploy
 
 When the deployment process has fully completed.
 
+
+##### data
+* deployment_id (string): A uuid value for the deployment that just completed.
+
+
 ```
-Deploy.on("end-deploy", function(options){ });
+Deploy.on("end-deploy", function(data){ });
 ```
 #### start-deploy-to-instance
 
 When the instance has been fully setup and ready for use.
 
+##### data
+* deployment_id (string): A uuid value for the deployment.
+* instance (object): The details of the instance that is being deployed to.
+
+
 ```
-Deploy.on("start-deploy-to-instance", function(instance){ });
+Deploy.on("start-deploy-to-instance", function(data){ });
 ```
 #### command-complete
 
 When the instance has been fully setup and ready for use.
 
-* data (object): response, instance, command.
+##### data
+* deployment_id (string): A uuid value for the deployment.
+* instance (object): The details of the instance that just completed.
+* command (string): The command that was just run.
+* response (string): The response that was returned based on the command that was run.
 
 ```
 Deploy.on("command-complete", function(data){ });
@@ -123,8 +153,12 @@ Deploy.on("command-complete", function(data){ });
 
 When the deployment has been completed on a specific instance.
 
+##### data
+* deployment_id (string): A uuid value for the deployment.
+* instance (object): The details of the instance that just completed.
+
 ```
-Deploy.on("complete-deploy-to-instance", function(instance){ });
+Deploy.on("complete-deploy-to-instance", function(data){ });
 ```
 #### error
 
@@ -154,28 +188,28 @@ Deploy.run(opts, function (err, ASGroups) {
     console.log(arguments);
 });
 
-Deploy.on("ready", function(config){
-    console.dir("..-->ready---->", config)
+Deploy.on("ready", function(data){
+    console.dir("..-->ready---->", data)
 });
 
-Deploy.on("start-deploy", function(options){
-    console.log(".....Start Deploy---->", options)
+Deploy.on("start-deploy", function(data){
+    console.log(".....Start Deploy---->", data)
 });
 
-Deploy.on("start-deploy-to-group", function(key){
-    console.log("..........start-deploy-to-group---->", key)
+Deploy.on("start-deploy-to-group", function(data){
+    console.log("..........start-deploy-to-group---->", data)
 });
 
-Deploy.on("complete-deploy-to-group", function(key){
-    console.log("...............complete-deploy-to-group---->", key)
+Deploy.on("complete-deploy-to-group", function(data){
+    console.log("...............complete-deploy-to-group---->", data)
 });
 
-Deploy.on("end-deploy", function(options){
-    console.log("end-deploy---->", options)
+Deploy.on("end-deploy", function(data){
+    console.log("end-deploy---->", data)
 });
 
-Deploy.on("start-deploy-to-instance", function(instance){
-    console.log("..............start-deploy-to-instance---->", instance)
+Deploy.on("start-deploy-to-instance", function(data){
+    console.log("..............start-deploy-to-instance---->", data)
 });
 
 Deploy.on("command-complete", function(data){
@@ -190,13 +224,11 @@ Deploy.on("command-complete", function(data){
 
     }
 
-
-
-    //console.log("............command-complete---->", details)
+    //console.log("............command-complete---->", data)
 });
 
-Deploy.on("complete-deploy-to-instance", function(instance){
-    console.log("-complete-deploy-to-instance---->", instance)
+Deploy.on("complete-deploy-to-instance", function(data){
+    console.log("-complete-deploy-to-instance---->", data)
 });
 
 Deploy.on("error", function(err){
