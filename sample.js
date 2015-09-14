@@ -15,10 +15,6 @@ Deploy.run(opts, function (err, ASGroups) {
     console.log(arguments);
 });
 
-Deploy.on("ready", function(config){
-    console.dir("..-->ready---->", config)
-});
-
 Deploy.on("start-deploy", function(options){
     console.log(".....Start Deploy---->", options)
 });
